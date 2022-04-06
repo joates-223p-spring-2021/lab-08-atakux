@@ -9,17 +9,18 @@ atakux707@csu.fullerton.edu
 
 import random
 
+#empty lists for usedLetters and correctLetters
 usedLetters = []
 correctLetters = []
 
 # Hangman class.
 class Hangman:
     
-
     def __init__(self, word, triesAllowed):
-        
+        #constructor
         self.word = word
         self.triesAllowed = triesAllowed
+
 
     def Guess(self, letter):
         """Pass in a letter (length = 1) and check to see if it is in the word.
@@ -33,6 +34,7 @@ class Hangman:
                 usedLetters.append(letter)
                 correctLetters.append(letter)
             return True
+
         else:
             if letter in usedLetters:
                 return False
@@ -41,10 +43,12 @@ class Hangman:
                 usedLetters.append(letter)
             return False
 
+
     def GetNumTriesLeft(self):
         """Return the number of tries left"""
         return self.triesAllowed
     
+
     def GetDisplayWord(self):
         """Return the display word (with dashes where letters have not been guessed)
         i.e. the word happy with only the letter 'p' guessed so far would be '--pp-'"""
@@ -53,10 +57,9 @@ class Hangman:
         for i in range(len(self.word)):
             if self.word[i] in correctLetters:
                 dashed = dashed[ : i] + self.word[i] + dashed[i + 1 : ] 
-        print(dashed)
-
         return dashed
     
+
     def GetLettersUsed(self):
         """Return a string with the list of letters that have been used"""
         used=''
@@ -65,6 +68,7 @@ class Hangman:
             used += l + '-'
 
         return used
+
 
     def GetGameResult(self):
         """Return True if all letters have been guessed. False otherwise"""
@@ -116,12 +120,15 @@ if __name__=="__main__":
     wordsList = list(wordFileText.split())
     randIndex = random.randint(0, len(wordsList))
 
-    word = wordsList[randIndex]
+    word = wordsList[183556]
     
+    #set the amount of guesses the player gets
     if len(word) >= 8:
         tries = len(word)
     else:
         tries = 8
+
+
 
     # Instantiate a game using the Hangman class
     game = Hangman(word, tries)
@@ -129,8 +136,8 @@ if __name__=="__main__":
     # Use a while loop to play the game
     while playing:
         tries = game.GetNumTriesLeft()
-
         game.DrawGallows()
+
 
         if tries == 0 and gameResult == False:
             print(f"You lost. The word was {word}")
@@ -153,10 +160,12 @@ if __name__=="__main__":
                 guessResult = game.Guess(playerGuess)
                 gameResult = game.GetGameResult()
 
+
             if guessResult == True:
                 print("Good guess! Letters used:", game.GetLettersUsed())
             else:
                 print("Too bad! Letters used:", game.GetLettersUsed())
+
 
             if gameResult == True:
                 print(f"Congratulations! You won!! The word was {word}")
