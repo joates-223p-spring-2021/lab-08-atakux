@@ -53,6 +53,8 @@ class Hangman:
         for i in range(len(self.word)):
             if self.word[i] in correctLetters:
                 dashed = dashed[ : i] + self.word[i] + dashed[i + 1 : ] 
+        print(dashed)
+
         return dashed
     
     def GetLettersUsed(self):
@@ -92,12 +94,6 @@ class Hangman:
             print("-----|\n |   |\n |   0\n |  /|\\\n |   U\n | \n | \n |\n---")
         elif self.triesAllowed == 1:
             print("-----|\n |   |\n |   0\n |  /|\\\n |   U\n |  /\n | \n |\n---")
-        elif self.triesAllowed == 0 and self.GetGameResult() == False:
-            print("-----|\n |   |\n |   0\n |  /|\\\n |   U\n |  / \\\n | \n |\n---")
-            return
-        elif self.triesAllowed == 0 and self.GetGameResult() == True:
-            print("-----|\n |   |\n |   0\n |  \\|//\n |   U\n |  / \\\n | \n |\n---")
-            return
         else:
             return
 
@@ -138,7 +134,11 @@ if __name__=="__main__":
 
         if tries == 0 and gameResult == False:
             print(f"You lost. The word was {word}")
+            print("-----|\n |   |\n |   0\n |  /|\\\n |   U\n |  / \\\n | \n |\n---")
+            print("\nThis time I win!")
+
             playing = False
+
 
         elif tries != 0:    
             print("Here's your word so far:", game.GetDisplayWord())
@@ -161,6 +161,6 @@ if __name__=="__main__":
             if gameResult == True:
                 print(f"Congratulations! You won!! The word was {word}")
                 print("-----|\n |    \n |    \n |     \n |   0\n |  \\|/\n |   U\n |  / \\\n---")
-                break
+                playing = False
             else:
                 continue
