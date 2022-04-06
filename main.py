@@ -1,47 +1,106 @@
 
 # -*- coding: utf-8 -*-
 """
-johnwoates
+Angela DeLeo
 CPSC 223P-01
-Thu Mar 8, 2021
-joates@fullerton.edu
+Tue Apr 05, 2022
+atakux707@csu.fullerton.edu
 """
 
 import random
 
+usedLetters = []
+correctLetters = []
+
 # Hangman class.
 class Hangman:
     
+
     def __init__(self, word, triesAllowed):
-        pass
+        
+        self.word = word
+        self.triesAllowed = triesAllowed
 
     def Guess(self, letter):
         """Pass in a letter (length = 1) and check to see if it is in the word.
             If it is, replace blanks in display word with letter and return True
             If not, decrement the number of tries left and return False
         """
-        pass
+        if letter in word:
+            if letter in usedLetters:
+                return True
+            else:
+                usedLetters.append(letter)
+                correctLetters.append(letter)
+            return True
+        else:
+            if letter in usedLetters:
+                return False
+            else:
+                self.triesAllowed -= 1
+                usedLetters.append(letter)
+            return False
 
     def GetNumTriesLeft(self):
         """Return the number of tries left"""
-        pass
+        return self.triesAllowed
     
     def GetDisplayWord(self):
         """Return the display word (with dashes where letters have not been guessed)
         i.e. the word happy with only the letter 'p' guessed so far would be '--pp-'"""
-        pass
+        dashed = '-'*len(self.word)
+        
+        for i in range(len(self.word)):
+            if self.word[i] in correctLetters:
+                dashed = dashed[ : i] + self.word[i] + dashed[i + 1 : ] 
+        return dashed
     
     def GetLettersUsed(self):
         """Return a string with the list of letters that have been used"""
-        pass
+        used=''
+        
+        for l in usedLetters:
+            used += l + '-'
+
+        return used
 
     def GetGameResult(self):
         """Return True if all letters have been guessed. False otherwise"""
-        pass
+        dashes = self.GetDisplayWord()
+
+        if '-' in dashes:
+            return False
+        else:
+            return True
+
 
     def DrawGallows(self):
         """Optional: Return string representing state of gallows"""
-        pass
+        if self.triesAllowed >= 8:
+            print("-----|\n |\n | \n | \n | \n | \n | \n |\n---")
+        elif self.triesAllowed == 7:
+            print("-----|\n |   |\n | \n | \n | \n | \n | \n |\n---")
+        elif self.triesAllowed == 6:
+            print("-----|\n |   |\n |   0\n | \n | \n | \n | \n |\n---")
+        elif self.triesAllowed == 5:
+            print("-----|\n |   |\n |   0\n |  /\n | \n | \n | \n |\n---")
+        elif self.triesAllowed == 4:
+            print("-----|\n |   |\n |   0\n |  /|\n | \n | \n | \n |\n---")
+        elif self.triesAllowed == 3:
+            print("-----|\n |   |\n |   0\n |  /|\\\n | \n | \n | \n |\n---")
+        elif self.triesAllowed == 2:
+            print("-----|\n |   |\n |   0\n |  /|\\\n |   U\n | \n | \n |\n---")
+        elif self.triesAllowed == 1:
+            print("-----|\n |   |\n |   0\n |  /|\\\n |   U\n |  /\n | \n |\n---")
+        elif self.triesAllowed == 0 and self.GetGameResult() == False:
+            print("-----|\n |   |\n |   0\n |  /|\\\n |   U\n |  / \\\n | \n |\n---")
+            return
+        elif self.triesAllowed == 0 and self.GetGameResult() == True:
+            print("-----|\n |   |\n |   0\n |  \\|//\n |   U\n |  / \\\n | \n |\n---")
+            return
+        else:
+            return
+
 
 # implement the logic of your game below
 if __name__=="__main__":
@@ -49,15 +108,59 @@ if __name__=="__main__":
     wordFile = open("hangman_words.txt", "r")
     wordFileText = wordFile.read()
     wordFile.close()
-    
+
+    playing = True    
+
+
     # Seed the random number generator with current system time
     random.seed()
     
     # Convert the string of words in wordFile to a list,
     # then get a random word using
-    # randomIndex = random.randint(min, max)
+    wordsList = list(wordFileText.split())
+    randIndex = random.randint(0, len(wordsList))
+
+    word = wordsList[randIndex]
     
+    if len(word) >= 8:
+        tries = len(word)
+    else:
+        tries = 8
+
     # Instantiate a game using the Hangman class
-    
-    
+    game = Hangman(word, tries)
+
     # Use a while loop to play the game
+    while playing:
+        tries = game.GetNumTriesLeft()
+
+        game.DrawGallows()
+
+        if tries == 0 and gameResult == False:
+            print(f"You lost. The word was {word}")
+            playing = False
+
+        elif tries != 0:    
+            print("Here's your word so far:", game.GetDisplayWord())
+            print(f"You have {tries} guesses left\n")
+
+            playerGuess = input("Guess a letter: ").lower()
+
+
+            if len(playerGuess) > 1:
+                print("Input only 1 letter please.")
+            else:
+                guessResult = game.Guess(playerGuess)
+                gameResult = game.GetGameResult()
+
+            if guessResult == True:
+                print("Good guess! Letters used:", game.GetLettersUsed())
+            else:
+                print("Too bad! Letters used:", game.GetLettersUsed())
+
+            if gameResult == True:
+                print(f"Congratulations! You won!! The word was {word}")
+                print("-----|\n |    \n |    \n |     \n |   0\n |  \\|/\n |   U\n |  / \\\n---")
+                break
+            else:
+                continue
