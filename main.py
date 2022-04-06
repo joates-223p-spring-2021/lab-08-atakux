@@ -26,7 +26,7 @@ class Hangman:
             If it is, replace blanks in display word with letter and return True
             If not, decrement the number of tries left and return False
         """
-        if letter in word:
+        if letter in self.word:
             if letter in usedLetters:
                 return True
             else:
