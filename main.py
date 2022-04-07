@@ -120,7 +120,7 @@ if __name__=="__main__":
     wordsList = list(wordFileText.split())
     randIndex = random.randint(0, len(wordsList))
 
-    word = wordsList[183556]
+    word = wordsList[randIndex]
     
     #set the amount of guesses the player gets
     if len(word) >= 8:
