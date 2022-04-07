@@ -9,9 +9,6 @@ atakux707@csu.fullerton.edu
 
 import random
 
-#empty lists for usedLetters and correctLetters
-usedLetters = []
-correctLetters = []
 
 # Hangman class.
 class Hangman:
@@ -21,6 +18,10 @@ class Hangman:
         self.word = word
         self.triesAllowed = triesAllowed
 
+        #empty lists for usedLetters and correctLetters
+        self.usedLetters = []
+        self.correctLetters = []
+
 
     def Guess(self, letter):
         """Pass in a letter (length = 1) and check to see if it is in the word.
@@ -28,19 +29,19 @@ class Hangman:
             If not, decrement the number of tries left and return False
         """
         if letter in self.word:
-            if letter in usedLetters:
+            if letter in self.usedLetters:
                 return True
             else:
-                usedLetters.append(letter)
-                correctLetters.append(letter)
+                self.usedLetters.append(letter)
+                self.correctLetters.append(letter)
             return True
 
         else:
-            if letter in usedLetters:
+            if letter in self.usedLetters:
                 return False
             else:
                 self.triesAllowed -= 1
-                usedLetters.append(letter)
+                self.usedLetters.append(letter)
             return False
 
 
@@ -55,7 +56,7 @@ class Hangman:
         dashed = '-'*len(self.word)
         
         for i in range(len(self.word)):
-            if self.word[i] in correctLetters:
+            if self.word[i] in self.correctLetters:
                 dashed = dashed[ : i] + self.word[i] + dashed[i + 1 : ] 
         return dashed
     
@@ -64,7 +65,7 @@ class Hangman:
         """Return a string with the list of letters that have been used"""
         used=''
         
-        for l in usedLetters:
+        for l in self.usedLetters:
             used += l + '-'
 
         return used
